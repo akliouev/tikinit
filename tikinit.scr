@@ -1,0 +1,12 @@
+/ip service
+set telnet disabled=yes
+set ftp disabled=yes
+set www disabled=yes
+set www-ssl disabled=no
+set api disabled=yes
+set winbox disabled=yes
+set api-ssl disabled=yes
+
+/ip ssh
+set set allow-none-crypto=no strong-crypto=yes
+
