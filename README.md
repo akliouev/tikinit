@@ -20,8 +20,8 @@ The script does:
 1. A new or just resetted mikrotik
 2. Working internet connection
 3. Updated user table in script. The format is "username";"password";"ssh public key"
-3.1 SSH key must be either RSA or DSA. Tested with RSA only
-3.2 If password is set to "random", a random password will be generated for this user, enabling ssh with public key
+   1 SSH key must be either RSA or DSA. Tested with RSA only
+   2 If password is set to "random", a random password will be generated for this user, enabling ssh with public key
 
 ## Running the script
 1. Download the script to a fresh Mikrotik with "/tool fetch", scp, web interface etc...
