@@ -20,7 +20,7 @@
 /system package update set channel=long-term
 /system package update download
 /system routerboard upgrade
-/system ntp client  set enabled=yes server-dns-names=pool.ntp.org
+/system ntp client  set enabled=yes primary-ntp=[:resolve pool.ntp.org]
 
 /ip ssh set strong-crypto=yes allow-none-crypto=no always-allow-password-login=no
 
