@@ -25,7 +25,7 @@ The script does:
 
 ## Running the script
 1. Download the script to a fresh Mikrotik with "/tool fetch", scp, web interface etc...
-2. Execute "/import file-name=tikinit.scr"
+2. Execute "/import file-name=tikinit.rsc"
 3. Wait (certificates take a while to sign)
 4. Verify remote access with ssh and web ssl (all other services should be disabled)
 5. _Optional:_ Disable "admin" account
