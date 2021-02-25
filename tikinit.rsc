@@ -58,6 +58,10 @@
 :put "Signing server certificate. Can take a while"
 /certificate sign Server ca=CATemplate
 
+#
+# Setup IP services
+#
+:put "Setting up IP serveices"
 /ip service disable [find where name="telnet"]
 /ip service disable [find where name="ftp"]
 /ip service disable [find where name="www"]
@@ -65,6 +69,39 @@
 /ip service disable [find where name="api-ssl"]
 /ip service disable [find where name="winbox"]
 
+:put "Enabling web-ssl with self-signed certificate"
 /ip service set [find where name="www-ssl"] certificate=Server disabled=no
 
+#
+# Add Let's Encrypt Roots and Intermediates
+#
+
+
+:put "Downloading Current active LE Root"
+/tool fetch https://letsencrypt.org/certs/isrgrootx1.pem
+
+:put "Downloading Upcomming LE Root" 
+/tool fetch https://letsencrypt.org/certs/isrg-root-x2.pem
+
+:put "Downloading Active LE Intermediate"
+/tool fetch https://letsencrypt.org/certs/lets-encrypt-r3.pem
+
+:put "Downloading Upcomming LE Intermediate"
+/tool fetch https://letsencrypt.org/certs/lets-encrypt-e1.pem
+
+:put "Downloading LE  Backup #1"
+/tool fetch https://letsencrypt.org/certs/lets-encrypt-r4.pem
+
+:put "Downloading Backup #2"
+/tool fetch https://letsencrypt.org/certs/lets-encrypt-e2.pem
+
+:put "Flushing IO"
+:delay 2s
+:put "Installing LE Certificates"
+/certificate import file-name=isrgrootx1.pem passphrase=""
+/certificate import file-name=isrg-root-x2.pem passphrase=""
+/certificate import file-name=lets-encrypt-r3.pem passphrase=""
+/certificate import file-name=lets-encrypt-e1.pem passphrase=""
+/certificate import file-name=lets-encrypt-r4.pem passphrase=""
+/certificate import file-name=lets-encrypt-e2.pem passphrase=""
 }
