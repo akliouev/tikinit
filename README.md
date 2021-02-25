@@ -7,7 +7,7 @@ Mikrotik script to initialize out of the box mikrotiks to something more secure 
 The script does:
 
 - disables fast-path
-- sets pachage update channel to "long-term"
+- sets package update channel to "long-term"
 - updates the packages and firmware
 - adds NTP servers
 - sets ssh server settings to more secure ones (strong crypto, no passwords if ssh key present etc...)
