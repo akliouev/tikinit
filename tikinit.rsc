@@ -52,7 +52,7 @@
 #
 
 /certificate add name=CATemplate common-name=CArouter key-usage=key-cert-sign,crl-sign key-size=4096 days-valid=900
-/certificate add name=Server common-name="router.lan" subject-alt-name="IP:192.168.88.1" key-size=2048 days-valid=900
+/certificate add name=Server common-name="router.lan" key-usage=digital-signature,key-encipherment,data-encipherment,tls-server,tls-client subject-alt-name="IP:192.168.88.1" key-size=2048 days-valid=900
 :put "Signing CA certificate. Can take a while"
 /certificate sign CATemplate
 :put "Signing server certificate. Can take a while"
