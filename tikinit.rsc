@@ -17,9 +17,6 @@
 
 /ip settings set allow-fast-path=no
 #/ip dns set allow-remote-requests=yes servers=8.8.8.8,8.8.4.4,1.1.1.1
-/system package update set channel=long-term
-/system package update download
-/system routerboard upgrade
 /system ntp client  set enabled=yes primary-ntp=[:resolve pool.ntp.org]
 
 /ip ssh set strong-crypto=yes allow-none-crypto=no always-allow-password-login=no
@@ -53,24 +50,27 @@
 
 /certificate add name=CATemplate common-name=CArouter key-usage=key-cert-sign,crl-sign key-size=4096 days-valid=900
 /certificate add name=Server common-name="router.lan" key-usage=digital-signature,key-encipherment,data-encipherment,tls-server,tls-client subject-alt-name="IP:192.168.88.1" key-size=2048 days-valid=900
-:put "Signing CA certificate. Can take a while"
+
+:put "Signing CA certificate. Can take a while (1-2 mins)"
 /certificate sign CATemplate
-:put "Signing server certificate. Can take a while"
+
+:put "Signing Server certificate. Can take a while (1-2 mins)"
 /certificate sign Server ca=CATemplate
+
 
 #
 # Setup IP services
 #
-:put "Setting up IP serveices"
-/ip service disable [find where name="telnet"]
-/ip service disable [find where name="ftp"]
-/ip service disable [find where name="www"]
-/ip service disable [find where name="api"]
-/ip service disable [find where name="api-ssl"]
-/ip service disable [find where name="winbox"]
+:put "Setting up IP services"
+/ip service disable telnet
+/ip service disable ftp
+/ip service disable www
+/ip service disable api
+/ip service disable api-ssl
+/ip service disable winbox
 
 :put "Enabling web-ssl with self-signed certificate"
-/ip service set [find where name="www-ssl"] certificate=Server disabled=no
+/ip service set www-ssl certificate=Server disabled=no
 
 #
 # Add Let's Encrypt Roots and Intermediates
@@ -104,4 +104,23 @@
 /certificate import file-name=lets-encrypt-e1.pem passphrase=""
 /certificate import file-name=lets-encrypt-r4.pem passphrase=""
 /certificate import file-name=lets-encrypt-e2.pem passphrase=""
+}
+
+#
+# Upgrade
+#
+
+/system package update set channel=long-term
+/system package update check-for-updates once 
+:delay 5s;
+:if ( [get status] = "New version is available") do=/
+{
+  /system scheduler
+  add start-time=startup name=OneTime-Upgrade on-event=":delay 5s\r\
+      \n:put [:execute {/system routerboard upgrade; y}]\r\
+      \n:delay 3s;
+      \n:execute [:delay 10s; /system scheduler remove OneTime-Upgrade]\r\
+      \n:execute [:delay 15s; /system reboot; y]"
+  
+  /system package update install
 }
